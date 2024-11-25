@@ -4,8 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "config/material-tailwind-theme-provider";
 import ReactQueryClientProviders from "config/ReactQueryClientProvider";
 import RecoilProvider from "config/RecoilProvider";
-import Header from "components/header";
-import Footer from "components/footer";
+import MainLayout from "components/layouts/main-layout";
+import Auth from "components/auth";
 
 
 
@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const loggedIn = true;
+
   return (
     <RecoilProvider>
       <ReactQueryClientProviders>
@@ -32,7 +34,7 @@ export default function RootLayout({ children }) {
               />
             </head>
             <body className={inter.className}>
-              {children}
+              {loggedIn ? <MainLayout>{children}</MainLayout> : <Auth/>}
             </body>
           </html>
         </ThemeProvider>
