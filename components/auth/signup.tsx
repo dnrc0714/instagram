@@ -2,6 +2,7 @@
 
 import { Button, Input } from "@material-tailwind/react";
 import { useMutation } from "@tanstack/react-query";
+import { saveUserProfileImage } from "actions/kakaoActions";
 import { useState } from "react";
 
 import { createBrowserSupabaseClient } from "utils/supabase/client";
@@ -23,7 +24,11 @@ export default function SignUp({ setView }) {
                     : "http://localhost:3000/auth/callback",
             },
         });
-        console.log(data);
+        
+        if(error) {
+            alert("카카오 로그인중 오류가 발생했습니다." +  error.message);
+            return false;
+        }
     }
 
     const signupMutation = useMutation({

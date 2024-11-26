@@ -22,7 +22,6 @@ export default async function RootLayout({ children }) {
   
   const {data: {session},
   } = await supabase.auth.getSession();
-  console.log(session);
 
   return (
     <RecoilProvider>

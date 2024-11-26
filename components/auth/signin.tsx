@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
+import CallBack from "./callback";
 
 export default function SignIn({ setView }) {
     const [email, setEmail] = useState("");
@@ -18,8 +19,7 @@ export default function SignIn({ setView }) {
                     ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`
                     : "http://localhost:3000/auth/callback",
             },
-        });
-        console.log(data);
+        });    
     }
 
     const signInMutation = useMutation({
@@ -60,7 +60,7 @@ export default function SignIn({ setView }) {
                 loading={signInMutation.isPending}
                 disabled={signInMutation.isPending}
                 color="light-blue"
-                className="w-full text-md py-1"
+                className="w-full text-md py-1 bg-yellow-700"
                 >
                     로그인
                 </Button>
