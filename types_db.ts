@@ -69,14 +69,17 @@ export type Database = {
       profile: {
         Row: {
           id: string
+          name: string | null
           profile_img_url: string | null
         }
         Insert: {
           id: string
+          name?: string | null
           profile_img_url?: string | null
         }
         Update: {
           id?: string
+          name?: string | null
           profile_img_url?: string | null
         }
         Relationships: []

@@ -4,3 +4,8 @@ export const searchState = atom({
     key : "searchState",
     default : "",
 });
+
+export const selectedUserState = atom({
+    key : "selectedUserState",
+    default : null
+})

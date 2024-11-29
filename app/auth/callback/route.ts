@@ -1,9 +1,5 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { createServerSupabaseClient } from "utils/supabase/server";
-import axios from "axios";
-import { saveUserProfileImage } from "actions/kakaoActions";
 import CallBack from "components/auth/callback";
 
 export async function GET(request: Request) {

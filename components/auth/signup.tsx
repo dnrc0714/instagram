@@ -2,13 +2,15 @@
 
 import { Button, Input } from "@material-tailwind/react";
 import { useMutation } from "@tanstack/react-query";
-import { saveUserProfileImage } from "actions/kakaoActions";
+import { saveUserProfile } from "actions/kakaoActions";
 import { useState } from "react";
+import { useQuery } from "react-query";
 
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export default function SignUp({ setView }) {
     const [otp, setOtp] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmationRequired, setConfirmationRequired] = useState(false);
@@ -37,7 +39,7 @@ export default function SignUp({ setView }) {
                 email,
                 password,
                 options: {
-                    emailRedirectTo: "http://localhost:3000/signup/confirm"
+                    emailRedirectTo: "http://localhost:3000/signup/confirm",
                 },
             });
 
@@ -46,6 +48,7 @@ export default function SignUp({ setView }) {
             }
             if (error) {
                 alert(error.message);
+                return false;
             }
         },
     });
@@ -59,14 +62,36 @@ export default function SignUp({ setView }) {
             });
 
             if (data) {
+                const { error: metadataError } = await supabase.auth.updateUser({
+                    data: { name }, // 사용자 메타데이터에 이름 추가
+                });
+
+                if (metadataError) {
+                    alert(`Failed to save name: ${metadataError.message}`);
+                    return false;
+                }
+
+                const saveMetaData = async () => {
+                    const session = await supabase.auth.getUser();
+                    const userId = session?.data?.user?.id;
+            
+                    console.log(session);
+                    console.log(session?.data?.user?.id);
+                    useQuery({
+                        queryKey: ['profile'], // 캐싱 및 재사용을 위한 queryKey
+                        queryFn: () => saveUserProfile('', userId, name), // 데이터를 가져오는 함수
+                    });
+            
+                    saveMetaData();
+                }
                 setConfirmationRequired(true);
             }
             if (error) {
                 alert(error.message);
+                return false;
             }
         },
     });
-
 
     return <div className="flex flex-col gap-4">
         <div className="pt-10 pb-6 px-10 w-full flex flex-col items-center justify-center max-w-lg border border-gray-400 bg-white gap-2">
@@ -80,6 +105,11 @@ export default function SignUp({ setView }) {
                 />
             ) : (
                 <>
+                    <Input value={name} onChange={(e) => setName(e.target.value)}
+                    label="name"
+                    type="text"
+                    className="w-full rounded-sm"
+                    />
                     <Input value={email} onChange={(e) => setEmail(e.target.value)}
                     label="email"
                     type="email"

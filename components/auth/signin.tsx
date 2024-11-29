@@ -1,6 +1,6 @@
 
 import { Button, Input } from "@material-tailwind/react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
@@ -28,9 +28,10 @@ export default function SignIn({ setView }) {
                 email,
                 password
             });
-
+            
             if (data) {
                 console.log(data);
+                CallBack(data);
             }
 
             if (error) {
