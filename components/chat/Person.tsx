@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 import TimeAgo from "javascript-time-ago";
 import ko from "javascript-time-ago/locale/ko";
+import { Avatar } from "@material-tailwind/react";
 
 TimeAgo.addDefaultLocale(ko);
 
@@ -16,24 +17,9 @@ export default function Person({
     isActive = false,
     onChatScreen = false,
     onClick = null,
+    name,
+    profileImgUrl
 }) {
-    const [userId, setUserId] = useState<string | null>(null);
-    const supabase = createBrowserSupabaseClient();
-    useEffect(() => {
-    const fetchUser = async () => {
-        const { data: user, error } = await supabase.auth.getUser();
-
-        setUserId(user?.user?.id);
-    };
-    fetchUser();
-    }, []);
-
-    const { data } =
-        useQuery({
-            queryKey: ['profile', userId], // 캐싱 및 재사용을 위한 queryKey
-            queryFn: () => getUserProfile(userId), // 데이터를 가져오는 함수
-            refetchOnWindowFocus: false, // 창 포커스 시 재요청 방지
-        });
     return (
         <div className={`flex w-full min-w-40 ${onClick && "cursor-pointer"} gap-4 items-center p-4 ${
                 !onChatScreen && isActive && "bg-light-blue-50"
@@ -41,13 +27,15 @@ export default function Person({
             ${onChatScreen && "bg-gray-50"}`}
             onClick={onClick}
         >
-            <img
-                src={data?.profile_img_url}
-                alt={data?.name}
-                className="w-10 h-10 rounded-full"
-            />
+            <Avatar
+            src={profileImgUrl || './images/simple_profile_img.png'}
+            alt="Profile"
+            variant="circular"
+            size="md"
+            className="bg-gray-200"
+            ></Avatar>
             <div>
-                <p className="text-black font-bold text-lg">{data?.name}</p>
+                <p className="text-black font-bold text-lg">{name}</p>
                 <p className="text-gray-500 text-sm">{timeAgo.format(Date.parse(onlineAt))}</p>
             </div>
         </div>

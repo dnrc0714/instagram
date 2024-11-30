@@ -18,7 +18,7 @@ export async function saveUserProfile(profileImageUrl: string, userId, name) {
     const { data, error } = await supabase
         .from('profile')  // 'profile' 테이블
         .upsert(
-            { id: userId, profile_img_url: profileImageUrl, name: name },  // 'id'와 'profile_img_url' 데이터
+            { id: userId, profile_img_url: profileImageUrl, name: name }  // 'id'와 'profile_img_url' 데이터
         ).select();
 
         handleError(error);
@@ -31,11 +31,25 @@ export async function getUserProfile(userId) {
     const {data, error} = await supabase.from("profile")
                                         .select(`id,
                                                 profile_img_url,
-                                                name,
+                                                name
                                                 `)
                                         .eq("id", safeUserId)
                                         .maybeSingle();
 
+    handleError(error);
+
+    return data;
+}
+
+export async function getAllUser() {
+    const supabase = await createServerSupabaseClient(); // 서버에서 Supabase 클라이언트 생성
+
+    const {data, error} = await supabase.from("profile")
+                                        .select(`id,
+                                            profile_img_url,
+                                            name
+                                            `);
+                                            
     handleError(error);
 
     return data;

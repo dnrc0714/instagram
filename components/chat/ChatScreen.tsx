@@ -14,6 +14,8 @@ export default function ChatScreen() {
             onlineAt={new Date().toISOString()}
             isActive={selectedUser}
             onChatScreen={true}
+            name={selectedUser.name}
+            profileImgUrl={selectedUser.profileImgUrl}
             />
             {/* 채팅 영역 */}
             <div className="w-full flex-1 flex flex-col p-3 gap-3">
