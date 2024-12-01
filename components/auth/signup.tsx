@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 
 import { createBrowserSupabaseClient } from "utils/supabase/client";
+import CallBack from "./callback";
 
 export default function SignUp({ setView }) {
     const [otp, setOtp] = useState("");
@@ -71,20 +72,7 @@ export default function SignUp({ setView }) {
                     return false;
                 }
 
-                const saveMetaData = async () => {
-                    const session = await supabase.auth.getUser();
-                    const userId = session?.data?.user?.id;
-            
-                    console.log(session);
-                    console.log(session?.data?.user?.id);
-                    useQuery({
-                        queryKey: ['profile'], // 캐싱 및 재사용을 위한 queryKey
-                        queryFn: () => saveUserProfile('', userId, name), // 데이터를 가져오는 함수
-                    });
-            
-                    saveMetaData();
-                }
-                setConfirmationRequired(true);
+                CallBack(data);
             }
             if (error) {
                 alert(error.message);

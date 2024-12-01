@@ -4,9 +4,33 @@ import Person from "./Person";
 import Message from "./Message";
 import { useRecoilValue } from "recoil";
 import { selectedUserState } from "utils/recoil/atoms";
+import { getAllMessages, sendMessage } from "actions/chatActions";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { Spinner } from "@material-tailwind/react";
 
 export default function ChatScreen() {
     const selectedUser = useRecoilValue(selectedUserState);
+    const  [message, setMessage] = useState("");
+
+    const sendMessageMutation = useMutation({
+        mutationFn: async () => {
+            return sendMessage({
+                message:message,
+                chatUserId: selectedUser.id
+            })
+        },
+        onSuccess: () => {
+            setMessage("");
+            getAllMessagesQuery.refetch();
+        }
+    });
+
+    const getAllMessagesQuery = useQuery({
+        queryKey: ['mesages', selectedUser],
+        queryFn: () => getAllMessages({ chatUserId: selectedUser?.id }),
+    });
+
     return selectedUser !== null? (
         <div className="w-full h-screen flex flex-col">
             {/* Active 유저 영역 */}
@@ -18,40 +42,31 @@ export default function ChatScreen() {
             profileImgUrl={selectedUser.profileImgUrl}
             />
             {/* 채팅 영역 */}
-            <div className="w-full flex-1 flex flex-col p-3 gap-3">
+            <div className="w-full overflow-y-scroll flex-1 flex flex-col p-3 gap-3">
+            {
+                //TODO
+                getAllMessagesQuery.data?.map((message) => 
                 <Message
-                    isFromMe={true}
-                    message={'안녕하세요'}
+                    key={message.id}
+                    message={message.message}
+                    isFromMe={message.receiver === selectedUser.id}
                 />
-                <Message
-                    isFromMe={false}
-                    message={'안녕하세요'}
-                />
-                <Message
-                    isFromMe={true}
-                    message={'안녕하세요'}
-                />
-                <Message
-                    isFromMe={true}
-                    message={'안녕하세요'}
-                />
-                <Message
-                    isFromMe={false}
-                    message={'안녕하세요'}
-                />
-                <Message
-                    isFromMe={false}
-                    message={'안녕하세요'}
-                />
+                )
+            }
             </div>
 
             {/* 채팅창 영역 */}
             <div className="flex">
-                <input className="p-3 w-full border-2 border-light-blue-300"
+                <input
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="p-3 w-full border-2 border-light-blue-300"
                     placeholder="메세지를 입력하세요."/>
-                <button className="min-w-20 p-3 bg-light-blue-300 text-white"
+                <button 
+                    onClick={() => sendMessageMutation.mutate()}
+                    className="min-w-20 p-3 bg-light-blue-300 text-white"
                 >
-                    <span>전송</span>
+                    {sendMessageMutation.isPending ? <Spinner/> : <span>전송</span>}
                 </button>
             </div>
         </div>

@@ -1,6 +1,5 @@
 'use server'
 
-import { UUID } from "crypto";
 import { createServerSupabaseClient } from "utils/supabase/server"
 import { v4 as uuidv4, validate as isUUID } from "uuid";
 

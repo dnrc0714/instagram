@@ -17,6 +17,7 @@ export default function Person({
     isActive = false,
     onChatScreen = false,
     onClick = null,
+    userId,
     name,
     profileImgUrl
 }) {

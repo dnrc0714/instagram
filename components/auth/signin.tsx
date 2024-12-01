@@ -30,7 +30,6 @@ export default function SignIn({ setView }) {
             });
             
             if (data) {
-                console.log(data);
                 CallBack(data);
             }
 
