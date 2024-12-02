@@ -30,7 +30,7 @@ export async function sendMessage({
 export async function getAllMessages({
     chatUserId
 }) {
-    const supabase = await createServerSupabaseClient   ();
+    const supabase = await createServerSupabaseClient();
     const {data : { session }, error} = await supabase.auth.getSession();
 
     if(error && !session.user) {
@@ -39,7 +39,7 @@ export async function getAllMessages({
 
     const {data, error: getMessagesError} = await supabase.from("message")
                                                         .select('*')
-                                                        .or(`recevier.eq.${chatUserId}, recevier.eq.${session.user.id}`)
+                                                        .or(`receiver.eq.${chatUserId}, receiver.eq.${session.user.id}`)
                                                         .or(`sender.eq.${chatUserId}, sender.eq.${session.user.id}`)
                                                         .order('created_at', {ascending: true});
 
@@ -47,6 +47,5 @@ export async function getAllMessages({
         return [];
         }
     
-    console.log(data);
     return data;
 }

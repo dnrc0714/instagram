@@ -19,7 +19,7 @@ export default function SignIn({ setView }) {
                     ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/auth/callback`
                     : "http://localhost:3000/auth/callback",
             },
-        });    
+        });
     }
 
     const signInMutation = useMutation({
@@ -36,7 +36,8 @@ export default function SignIn({ setView }) {
             if (error) {
                 alert(error.message);
             }
-        },
+        }
+
     });
 
     return <div className="flex flex-col gap-4">

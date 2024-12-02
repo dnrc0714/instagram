@@ -1,40 +1,68 @@
 'use client';
-import { useState } from "react";
+import { useEffect } from "react";
 import Person from "./Person";
 import { useRecoilState } from "recoil";
-import { selectedUserState } from "utils/recoil/atoms";
+import { presenceState, selectedUserState } from "utils/recoil/atoms";
 
 import { getAllUser } from "actions/kakaoActions";
 import { useQuery } from "@tanstack/react-query";
-import { Spinner } from "@material-tailwind/react";
-import { createServerSupabaseClient } from "utils/supabase/server";
+import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export default function ChatPeopleList({ loggedInUser }) {
+    const supabase = createBrowserSupabaseClient();
     const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
+    const [presence, setPresence] = useRecoilState(presenceState);
+
     const {data} = useQuery({
         queryKey: ["profile"],
-        queryFn: async () => {return (await getAllUser())
-                            .filter((user) => String(user.id) !== String(loggedInUser.user.id))
-                            }
+        queryFn: async () => {
+            const allUsers = await getAllUser();
+            return allUsers.filter((user) => user.id !== loggedInUser?.user.id);
+        },
     });
 
+    useEffect(() => {
+        const channel = supabase.channel("online_users", {
+            config: {
+            presence: {
+                key: loggedInUser.user.id,
+            },
+            },
+        });
+        channel.on("presence", { event: "sync" }, () => {
+            const newState = channel.presenceState();
+            const newStateObj = JSON.parse(JSON.stringify(newState));
+            setPresence(newStateObj);
+        });
+        channel.subscribe(async (status) => {
+            if (status !== "SUBSCRIBED") {
+            return;
+            }
+            const newPresenceStatus = await channel.track({
+            onlineAt: new Date().toISOString(),
+            });
+        });
+        return () => {
+            channel.unsubscribe();
+        };
+    }, []);
+    
     return (
         <div className="h-screen min-w-60 flex flex-col bg-gray-50">
-                {data?.map((person) => (
+                {data?.map((user) => (
                         <Person
-                            onClick={() => {
-                                setSelectedUser({
-                                    id: person.id,
-                                    name: person.name,
-                                    profileImgUrl: person.profile_img_url,
-                                });
-                                }}
-                            onlineAt={new Date().toISOString()}
-                            isActive={selectedUser?.id === person.id}
+                            key={user.id}
+                            onClick={() => {setSelectedUser({
+                                id: user.id,
+                                name: user.name,
+                                profileImgUrl: user?.profile_img_url
+                            });}}
+                            onlineAt={presence?.[user.id]?.[0]?.onlineAt}
+                            isActive={selectedUser?.id === user.id}
                             onChatScreen={false}
-                            userId={person?.id}
-                            name={person?.name}
-                            profileImgUrl={person?.profile_img_url}
+                            userId={user.id}
+                            name={user.name}
+                            profileImgUrl={user?.profile_img_url}
                         />
                     ))
                 }

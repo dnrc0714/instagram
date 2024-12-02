@@ -9,3 +9,8 @@ export const selectedUserState = atom({
     key : "selectedUserState",
     default : null
 })
+
+export const presenceState = atom({
+    key: "presenceState",
+    default : null
+})
