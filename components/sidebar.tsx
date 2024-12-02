@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, Logout, People, Search, Send } from "@mui/icons-material";
+import { Home, Logout, People, Person, Search, Send } from "@mui/icons-material";
 import Link from "next/link";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
@@ -13,8 +13,8 @@ export default function Sidebar(){
                 <Link href="/">
                     <Home className="text-2xl mb-10"/>
                 </Link>
-                <Link href="/people">
-                    <People className="text-2xl"/>
+                <Link href="/myFeed">
+                    <Person className="text-2xl"/>
                 </Link>
                 <Link href="/discover">
                     <Search className="text-2xl"/>
