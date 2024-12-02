@@ -8,6 +8,7 @@ import MainLayout from "components/layouts/main-layout";
 import Auth from "components/auth";
 import { createServerSupabaseClient } from "utils/supabase/server";
 import AuthProvider from "config/auth-provider";
+import { Analytics } from "@vercel/analytics/react"
 
 
 
@@ -24,6 +25,7 @@ export default async function RootLayout({ children }) {
   } = await supabase.auth.getSession();
 
   return (
+    
     <RecoilProvider>
       <ReactQueryClientProviders>
         <ThemeProvider>
@@ -40,7 +42,7 @@ export default async function RootLayout({ children }) {
             </head>
             <AuthProvider accessToken={session?.access_token}>
               <body className={inter.className}>
-                {session?.user ? <MainLayout>{children}</MainLayout> : <Auth/>}
+                {session?.user ? <MainLayout>{children}<Analytics/></MainLayout> : <Auth/>}
               </body>
             </AuthProvider>
           </html>
