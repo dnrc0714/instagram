@@ -9,6 +9,88 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      attachments: {
+        Row: {
+          created_at: string | null
+          file_url: string
+          id: number
+          post_id: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          file_url: string
+          id?: number
+          post_id?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          file_url?: string
+          id?: number
+          post_id?: number | null
+        }
+        Relationships: []
+      }
+      comment_likes: {
+        Row: {
+          created_at: string
+          creator_id: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          creator_id?: string
+          id: number
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comment_likes_id_fkey"
+            columns: ["id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          created_at: string
+          creator_id: string
+          id: number
+          parent_id: number
+          post_id: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          creator_id?: string
+          id?: number
+          parent_id: number
+          post_id: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          id?: number
+          parent_id?: number
+          post_id?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message: {
         Row: {
           created_at: string
@@ -24,7 +106,7 @@ export type Database = {
           is_deleted?: boolean
           message: string
           receiver: string
-          sender: string
+          sender?: string
         }
         Update: {
           created_at?: string
@@ -63,6 +145,59 @@ export type Database = {
           release_date?: string
           title?: string
           vote_average?: number
+        }
+        Relationships: []
+      }
+      post_likes: {
+        Row: {
+          created_at: string
+          creator_id: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          creator_id?: string
+          id: number
+        }
+        Update: {
+          created_at?: string
+          creator_id?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_likes_id_fkey"
+            columns: ["id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          content: string
+          created_at: string
+          creator_id: string
+          id: number
+          modified_at: string
+          modifier_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          creator_id?: string
+          id?: number
+          modified_at?: string
+          modifier_id?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          creator_id?: string
+          id?: number
+          modified_at?: string
+          modifier_id?: string
         }
         Relationships: []
       }

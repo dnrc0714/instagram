@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, Logout, People, Person, Search, Send } from "@mui/icons-material";
+import { Add, Home, Logout, People, Person, Search, Send } from "@mui/icons-material";
 import Link from "next/link";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
@@ -9,12 +9,15 @@ export default function Sidebar(){
 
     return (
         <aside className="h-screen p-6 border-r border-gray-300 flex flex-col justify-between w-fit">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
                 <Link href="/">
                     <Home className="text-2xl mb-10"/>
                 </Link>
                 <Link href="/myFeed">
                     <Person className="text-2xl"/>
+                </Link>
+                <Link href="/myFeed/add">
+                    <Add className="text-2xl"/>
                 </Link>
                 <Link href="/discover">
                     <Search className="text-2xl"/>

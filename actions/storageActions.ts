@@ -8,14 +8,14 @@ function handleError(error) {
         throw error
     }
 }
-export async function uploadFile(formData: FormData) {
+export async function uploadFile(formData: FormData, savePath) {
     const supabase = await createServerSupabaseClient();
 
     const files = Array.from(formData.entries()).map(([name, file]) => file as File);
 
     const results = await Promise.all(files.map(file => 
                                         supabase.storage
-                                        .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
+                                        .from(savePath)
                                         .upload(file.name, file, {upsert: true})
     ));
 
