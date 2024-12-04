@@ -14,7 +14,7 @@ export default function Feed({
         <div className="col-span-1 relative cursor-pointer">
             <img
             src={imgurl}
-            className="w-30 h-30"
+            className="w-60 h-60 object-co"
             />
         </div>
     );
