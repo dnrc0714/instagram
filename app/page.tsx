@@ -1,13 +1,32 @@
-import LogoutButton from "components/logout-button";
-import { createServerSupabaseClient } from "utils/supabase/server";
+'use client'
 
-export default async function Home() {
-  const supabase = await createServerSupabaseClient();
-  const {data: {user : {user_metadata}}} = await supabase.auth.getUser();
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfile } from "actions/kakaoActions";
+import LogoutButton from "components/logout-button";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { loggedUserState } from "utils/recoil/atoms";
+
+export default function Home() {
+  const [loggedUser, setLoggedUser] = useRecoilState(loggedUserState);
+
+  const { data } = useQuery({
+    queryKey: ['user_info'], // 쿼리 키와 파라미터로 캐싱 관리
+    queryFn: () => getUserProfile(), // 실제 rpc 호출
+    refetchOnWindowFocus: false,  // 페이지 포커스 시 다시 요청하지 않음
+  });
+
+  useEffect(() => {
+    setLoggedUser(data);
+  });
 
   return (
     <main className="w-full h-screen flex flex-col gap-2 items-center justify-center">
-    <h1 className="font-bold text-xl">Welcome {user_metadata?.name}!</h1> 
+    <h1 className="font-bold text-xl">
+        Welcome 
+        {loggedUser?.name}
+        !
+    </h1> 
     <LogoutButton />
   </main>
   );

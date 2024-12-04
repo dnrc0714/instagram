@@ -1,14 +1,15 @@
 'use client';
 import { useEffect } from "react";
 import Person from "./Person";
-import { useRecoilState } from "recoil";
-import { presenceState, selectedUserState } from "utils/recoil/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loggedUserState, presenceState, selectedUserState } from "utils/recoil/atoms";
 
 import { getAllUser } from "actions/kakaoActions";
 import { useQuery } from "@tanstack/react-query";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
-export default function ChatPeopleList({ loggedInUser }) {
+export default function ChatPeopleList() {
+    const loggedUser = useRecoilValue(loggedUserState);
     const supabase = createBrowserSupabaseClient();
     const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
     const [presence, setPresence] = useRecoilState(presenceState);
@@ -17,7 +18,7 @@ export default function ChatPeopleList({ loggedInUser }) {
         queryKey: ["profile"],
         queryFn: async () => {
             const allUsers = await getAllUser();
-            return allUsers.filter((user) => user.id !== loggedInUser?.user.id);
+            return allUsers.filter((user) => user.id !== loggedUser.id);
         },
     });
 
@@ -25,7 +26,7 @@ export default function ChatPeopleList({ loggedInUser }) {
         const channel = supabase.channel("online_users", {
             config: {
             presence: {
-                key: loggedInUser.user.id,
+                key: loggedUser.id,
             },
             },
         });

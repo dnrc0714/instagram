@@ -12,23 +12,40 @@ export type Database = {
       attachments: {
         Row: {
           created_at: string | null
+          creator_id: string | null
+          file_name: string | null
           file_url: string
           id: number
-          post_id: number | null
+          post_id: number
+          post_seq: number
         }
         Insert: {
           created_at?: string | null
+          creator_id?: string | null
+          file_name?: string | null
           file_url: string
           id?: number
-          post_id?: number | null
+          post_id: number
+          post_seq: number
         }
         Update: {
           created_at?: string | null
+          creator_id?: string | null
+          file_name?: string | null
           file_url?: string
           id?: number
-          post_id?: number | null
+          post_id?: number
+          post_seq?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "attachments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       comment_likes: {
         Row: {
@@ -58,6 +75,7 @@ export type Database = {
       }
       comments: {
         Row: {
+          comment: string | null
           created_at: string
           creator_id: string
           id: number
@@ -66,6 +84,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          comment?: string | null
           created_at?: string
           creator_id?: string
           id?: number
@@ -74,6 +93,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          comment?: string | null
           created_at?: string
           creator_id?: string
           id?: number
@@ -90,6 +110,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      follows: {
+        Row: {
+          created_at: string | null
+          follower_id: string
+          following_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          follower_id: string
+          following_id: string
+        }
+        Update: {
+          created_at?: string | null
+          follower_id?: string
+          following_id?: string
+        }
+        Relationships: []
       }
       message: {
         Row: {
@@ -248,7 +286,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_info: {
+        Args: {
+          user_id: string
+        }
+        Returns: {
+          id: string
+          name: string
+          profile_img_url: string
+          post_count: number
+          follow_count: number
+          following_count: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

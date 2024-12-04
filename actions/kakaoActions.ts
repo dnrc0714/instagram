@@ -23,17 +23,14 @@ export async function saveUserProfile(profileImageUrl: string, userId, name) {
         handleError(error);
 }
 
-export async function getUserProfile(userId) {
+export async function getUserProfile() {
     const supabase = await createServerSupabaseClient(); // 서버에서 Supabase 클라이언트 생성
-    const safeUserId = isUUID(userId) ? userId : uuidv4(); // 유효하지 않으면 새로운 UUID 생성
+    const {data: {user} } = await supabase.auth.getUser();
+    const safeUserId = isUUID(user?.id) ? user?.id : uuidv4(); // 유효하지 않으면 새로운 UUID 생성
 
-    const {data, error} = await supabase.from("profile")
-                                        .select(`id,
-                                                profile_img_url,
-                                                name
-                                                `)
-                                        .eq("id", safeUserId)
-                                        .maybeSingle();
+    const {data, error} = await supabase.rpc('get_user_info', {
+        user_id: safeUserId
+    }).maybeSingle();
 
     handleError(error);
 

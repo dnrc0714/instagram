@@ -1,9 +1,5 @@
 'use client'
 
-import { useQuery } from "@tanstack/react-query";
-import { getUserProfile } from "actions/kakaoActions"
-import { useEffect, useState } from "react";
-import { createBrowserSupabaseClient } from "utils/supabase/client";
 import TimeAgo from "javascript-time-ago";
 import ko from "javascript-time-ago/locale/ko";
 import { Avatar } from "@material-tailwind/react";

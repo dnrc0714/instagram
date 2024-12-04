@@ -14,3 +14,8 @@ export const presenceState = atom({
     key: "presenceState",
     default : null
 })
+
+export const loggedUserState = atom({
+    key: "loggedUserState",
+    default : null
+})

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   description: "this app is diary",
   icons: {
     icon: "./images/cuteKk.png",
-  }
+  },
 };
 
 export default async function RootLayout({ children }) {
@@ -34,6 +34,7 @@ export default async function RootLayout({ children }) {
         <ThemeProvider>
           {/* @ts-ignore */}
           <html lang="en">
+          <meta charSet="UTF-8" />
             <head>
               <link
                 rel="stylesheet"
