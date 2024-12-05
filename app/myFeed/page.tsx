@@ -4,7 +4,6 @@ import MyInfo from "components/feed/MyInfo";
 import { createServerSupabaseClient } from "utils/supabase/server";
 
 export default async function myFeedPage() {
-    const supabase = await createServerSupabaseClient();
 
     return (
         <div className="w-full h-screen flex justify-center ">

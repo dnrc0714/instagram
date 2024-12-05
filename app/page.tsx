@@ -13,7 +13,6 @@ export default function Home() {
   const { data } = useQuery({
     queryKey: ['user_info'], // 쿼리 키와 파라미터로 캐싱 관리
     queryFn: () => getUserProfile(), // 실제 rpc 호출
-    refetchOnWindowFocus: false,  // 페이지 포커스 시 다시 요청하지 않음
   });
 
   useEffect(() => {

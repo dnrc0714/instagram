@@ -8,7 +8,7 @@ export default function Sidebar(){
     const supabase = createBrowserSupabaseClient();
 
     return (
-        <aside className="h-screen p-6 border-r border-gray-300 flex flex-col justify-between w-fit">
+        <aside className="h-screen p-6 border-r border-gray-300 flex flex-col justify-between w-fit overflow-hidden">
             <div className="flex flex-col gap-6">
                 <Link href="/">
                     <Home className="text-2xl mb-10"/>

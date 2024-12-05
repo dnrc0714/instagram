@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 import { useDropzone } from "react-dropzone"
+import { useRecoilRefresher_UNSTABLE } from "recoil";
+import { loggedUserState } from "utils/recoil/atoms";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export async function handleSavePost({ content, images }) {
@@ -192,10 +194,6 @@ export default function AddFeed({ loggedInUser }) {
                 </div>
             )
         }
-      {/* Description 입력 섹션 */}
-        
-
-
     </div>
     );
 }

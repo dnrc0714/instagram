@@ -1,21 +1,15 @@
 'use client'
 
-import { createBrowserSupabaseClient } from "utils/supabase/client";
-
 export default function Feed({
-    feedId = null,
-    imgurl,
-    content,
-    createdAt = null
+    feed
 }) {
-    const supabase = createBrowserSupabaseClient();
-
     return (
-        <div className="col-span-1 relative cursor-pointer">
+        <div className="col-span-1 relative cursor-pointer aspect-square">
             <img
-            src={imgurl}
-            className="w-60 h-60 object-co"
+            src={feed?.attachments[0]?.file_url}
+            className="object-cover w-full h-full"
             />
         </div>
     );
 }
+

@@ -29,31 +29,27 @@ export async function savePost(content){
     return postData;
 }
 
-export async function getUserFeed({ page, pageSize }) {
-    const supabase = await createServerSupabaseClient(); // 서버에서 Supabase 클라이언트 생성
-    const {data : { session }, error} = await supabase.auth.getSession();
-
-    if(error && !session.user) {
-        throw new Error("User is not authenticated");
-    }
+export async function getUserFeed({ userId, page, pageSize }) {
+    const supabase = await createServerSupabaseClient();
 
     const {data, count, error: getFeedError} = await supabase.from('posts')
-                                        .select(`id, content, created_at, attachments(file_url)`)
-                                        .eq('creator_id', session?.user?.id)
+                                        .select(`id, content, created_at, attachments(file_url)`, { count: "exact" })
+                                        .eq('creator_id', userId)
                                         .range((page - 1) * pageSize, page * pageSize - 1);
-    
-    const hasNextPage = page < Math.ceil(count / pageSize);
 
-    if (getFeedError) {
+
+    if (getFeedError || (count === null || (page - 1) * pageSize >= count)) {
         console.error(getFeedError.message);
         return {
             data: [],
             count: 0,
             page: null,
             pageSize: null,
-            error,
+            getFeedError,
         };
     }
+    
+    const hasNextPage = page < Math.ceil(count / pageSize);
 
     return {
         data,

@@ -3,12 +3,16 @@
 import { Avatar } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "actions/kakaoActions";
-import { useRecoilValue } from "recoil";
+import { useEffect } from "react";
+import { useRecoilRefresher_UNSTABLE, useRecoilValue } from "recoil";
 import { loggedUserState } from "utils/recoil/atoms";
+import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export default function MyInfo() {
-    const loggedUser = useRecoilValue(loggedUserState);
+    const supabase = createBrowserSupabaseClient();
 
+    const loggedUser = useRecoilValue(loggedUserState);
+    
     return (
         <div className="w-full">
             <div className="flex gap-8 justify-center p-2">
