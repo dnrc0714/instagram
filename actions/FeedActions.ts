@@ -29,32 +29,32 @@ export async function savePost(content){
     return postData;
 }
 
-export async function getUserFeed({ userId, page, pageSize }) {
+export async function getUserFeeds({ userId, page, pageSize }) {
     const supabase = await createServerSupabaseClient();
 
-    const {data, count, error: getFeedError} = await supabase.from('posts')
+    const {data, count, error} = await supabase.from('posts')
                                         .select(`id, content, created_at, attachments(file_url)`, { count: "exact" })
                                         .eq('creator_id', userId)
                                         .range((page - 1) * pageSize, page * pageSize - 1);
 
-
-    if (getFeedError || (count === null || (page - 1) * pageSize >= count)) {
-        console.error(getFeedError.message);
+                                        const hasNextPage = page < Math.ceil(count / pageSize);
+    
+    if (error) {
+        console.error(error);
         return {
             data: [],
             count: 0,
             page: null,
             pageSize: null,
-            getFeedError,
+            error,
         };
     }
-    
-    const hasNextPage = page < Math.ceil(count / pageSize);
 
     return {
         data,
         page,
         pageSize,
         hasNextPage,
+        count
     };
 }
