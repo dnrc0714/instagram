@@ -12,15 +12,15 @@ import { loggedUserState } from "utils/recoil/atoms";
 export default function FeedList() {
     const loggedInUser = useRecoilValue(loggedUserState);
 
-    const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = 
+    useInfiniteQuery({
         initialPageParam: 1,
-        queryKey: ["posts"],
+        queryKey: ["posts", loggedInUser?.id],
         queryFn: ({ pageParam }) =>
-            getUserFeeds({ userId: loggedInUser?.id, page: pageParam, pageSize: 10 }),
+            getUserFeeds({ userId: loggedInUser?.id, page: pageParam, pageSize: 8 }),
         getNextPageParam: (lastPage) =>
-            lastPage.page ? lastPage.page + 1 : null,
-        }
-    );
+            lastPage.page ? lastPage.page + 1 : null,    
+    });
 
         const { ref, inView } = useInView({
             threshold: 1,
@@ -39,17 +39,21 @@ export default function FeedList() {
 
     return (
         <div className="grid lg:grid-cols-4 md:grid-cols-4 grid-cols-3">
-            {data?.pages
-                ?.map((page) => page.data)
-                ?.flat()
-                ?.map((feed) => (
-                    <Feed
-                        key={feed.id}
-                        feed={feed}
-                    />
-                ))
+            {
+                <>
+                    {data?.pages
+                    ?.map((page) => page.data)
+                    ?.flat()
+                    ?.map((feed) => (
+                        <Feed
+                            key={feed.id}
+                            feed={feed}
+                        />
+                    ))}
+                    <div ref={ref}></div>
+                </>
+            
             }
-            <div ref={ref}></div>
             {(isFetching || isFetchingNextPage) && <Spinner />}
         </div>
     );

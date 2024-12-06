@@ -50,6 +50,18 @@ export async function getUserFeeds({ userId, page, pageSize }) {
         };
     }
 
+    // console.log(count);
+    // console.log('-------');
+    // console.log(data.length);
+    // console.log('-------');
+    // console.log(page);
+    // console.log('-------');
+    // console.log(hasNextPage);
+    // console.log('-------');
+    // console.log((page - 1) * pageSize);
+    // console.log('-------');
+    // console.log(page * pageSize - 1);
+
     return {
         data,
         page,
