@@ -23,7 +23,7 @@ export default function FeedList() {
     });
 
         const { ref, inView } = useInView({
-            threshold: 1,
+            threshold: 0,
         });
     
         useEffect(() => {
@@ -34,7 +34,6 @@ export default function FeedList() {
         }, [inView, hasNextPage, isFetching, isFetchingNextPage, fetchNextPage]);
     
         useEffect(() => {
-            console.log(inView);
         }, [inView]);
 
     return (
