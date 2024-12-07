@@ -2,6 +2,14 @@
 
 import { createServerSupabaseClient } from "utils/supabase/server";
 
+function handleError(error) {
+    if(error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+
 export async function savePost(content){
     const supabase = await createServerSupabaseClient(); // 서버에서 Supabase 클라이언트 생성
 
@@ -69,4 +77,19 @@ export async function getUserFeeds({ userId, page, pageSize }) {
         hasNextPage,
         count
     };
+}
+
+export async function getFeed(id) {
+    const supabase = await createServerSupabaseClient();
+    const {data: {user} } = await supabase.auth.getUser();
+
+    const {data, error} = await supabase.from("posts")
+                                        .select(`id, content, created_at, attachments(file_url)`)
+                                        .eq("id", id)
+                                        .eq("creator_id", user?.id)
+                                        .maybeSingle();
+
+    handleError(error);
+
+    return data;
 }

@@ -1,7 +1,15 @@
-'use client'
+"use client"
 
 export default function UI({ feed }) {
     return (
-        <div>피드 상세페이지</div>
+        <div className="flex flex-col md:flex-row items-center">
+            <img
+            src={feed.attachments[0].file_url}
+            className="w-1/3"
+            />
+        <div className="md:w-2/3 w-full items-center md:items-start flex flex-col p-6 gap-4">
+            <h1 className="text-3xl font-bold">{feed.posts}</h1>
+            </div>
+        </div>
     );
 }
