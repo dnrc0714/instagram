@@ -17,9 +17,9 @@ export default function FeedList() {
         initialPageParam: 1,
         queryKey: ["posts", loggedInUser?.id],
         queryFn: ({ pageParam }) =>
-            getUserFeeds({ userId: loggedInUser?.id, page: pageParam, pageSize: 8 }),
+            getUserFeeds({ userId: loggedInUser?.id, page: pageParam, pageSize: 12 }),
         getNextPageParam: (lastPage) =>
-            lastPage.page ? lastPage.page + 1 : null,    
+            lastPage.hasNextPage ? lastPage.page + 1 : null,
     });
 
         const { ref, inView } = useInView({
@@ -28,7 +28,7 @@ export default function FeedList() {
     
         useEffect(() => {
             if (inView && hasNextPage && !isFetching && !isFetchingNextPage) {
-                // if (data?.pages.some((page) => page.data.length === 0)) return; // 빈 페이지 방어
+                if (data?.pages.some((page) => page.data.length === 0)) return; // 빈 페이지 방어
                 fetchNextPage();
             }
         }, [inView, hasNextPage, isFetching, isFetchingNextPage, fetchNextPage]);

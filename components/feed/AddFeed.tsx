@@ -45,14 +45,17 @@ export async function handleSavePost({ content, images }) {
 
         const postId = post.id;
 
+        console.log(postId);
+
         // 2. 이미지를 Supabase 스토리지에 업로드하고 `attachments` 테이블에 저장
         for (const image of images) {
-            const fileName = `${Date.now()}-${image.name}`;
-            const filePath = `${userId}/${postId}/${fileName}`;
+            const fileName = `${image.name.replace(/[^a-zA-Z0-9.\-_]/g, '_')}`;
+            const encodedName = encodeURIComponent(fileName);
+            const filePath = `${userId}/${postId}/${encodedName}`;
 
             // 2.1 스토리지에 이미지 업로드
             const { error: storageError } = await supabase.storage
-                .from('dropbox')
+                .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
                 .upload(filePath, image);
 
             if (storageError) {
@@ -113,10 +116,10 @@ export default function AddFeed({ loggedInUser }) {
     const savePostMutation = useMutation({
         mutationFn: () => handleSavePost({content, images}),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["posts"] }); // 캐시 무효화'
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
+            alert('저장되었습니다. myFeed로 이동합니다.');
             setImages([]); // 이미지 배열 초기화
             setContent(""); // 설명 초기화
-            alert('저장되었습니다. myFeed로 이동합니다.');
             router.push('/myFeed');
         },
         onError: (error) => {

@@ -45,7 +45,7 @@ export async function getUserFeeds({ userId, page, pageSize }) {
                                         .eq('creator_id', userId)
                                         .range((page - 1) * pageSize, page * pageSize - 1);
 
-                                        const hasNextPage = page < Math.ceil(count / pageSize);
+    const hasNextPage = page < Math.ceil(count / pageSize);
     
     if (error) {
         console.error(error);
@@ -57,18 +57,6 @@ export async function getUserFeeds({ userId, page, pageSize }) {
             error,
         };
     }
-
-    // console.log(count);
-    // console.log('-------');
-    // console.log(data.length);
-    // console.log('-------');
-    // console.log(page);
-    // console.log('-------');
-    // console.log(hasNextPage);
-    // console.log('-------');
-    // console.log((page - 1) * pageSize);
-    // console.log('-------');
-    // console.log(page * pageSize - 1);
 
     return {
         data,
@@ -84,12 +72,12 @@ export async function getFeed(id) {
     const {data: {user} } = await supabase.auth.getUser();
 
     const {data, error} = await supabase.from("posts")
-                                        .select(`id, content, created_at, attachments(file_url)`)
+                                        .select(`id, content, created_at, attachments(id, file_url, post_seq)`)
                                         .eq("id", id)
                                         .eq("creator_id", user?.id)
                                         .maybeSingle();
 
     handleError(error);
-
+    console.log(data);
     return data;
 }
