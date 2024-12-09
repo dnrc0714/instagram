@@ -5,7 +5,6 @@ import ko from "javascript-time-ago/locale/ko";
 import { Avatar } from "@material-tailwind/react";
 
 TimeAgo.addDefaultLocale(ko);
-
 const timeAgo = new TimeAgo("ko-kr");
 
 export default function Person({

@@ -71,13 +71,58 @@ export async function getFeed(id) {
     const supabase = await createServerSupabaseClient();
     const {data: {user} } = await supabase.auth.getUser();
 
-    const {data, error} = await supabase.from("posts")
-                                        .select(`id, content, created_at, attachments(id, file_url, post_seq)`)
+    const {data: postData, error} = await supabase.from("posts")
+                                        .select(`
+                                                    id,
+                                                    content,
+                                                    created_at,
+                                                    attachments (id, file_url, post_seq),
+                                                    likes_count: post_likes!inner(count)
+                                                `)
                                         .eq("id", id)
-                                        .eq("creator_id", user?.id)
                                         .maybeSingle();
 
     handleError(error);
-    console.log(data);
+
+    const likesCount = postData.likes_count;
+
+    const { data: likeData, error: likeError } = await supabase
+    .from("post_likes")
+    .select("id")
+    .eq("post_id", id)
+    .eq("creator_id", user?.id)
+    .single();
+
+    const isLiked = likeData ? true : false;
+
+    return { ...postData, is_liked: isLiked, likes_count: likesCount };;
+}
+
+export async function feedLike(postId) {
+    const supabase = await createServerSupabaseClient();
+    const {data: {user} } = await supabase.auth.getUser();
+
+    const {data, error} = await supabase.from("post_likes")
+                                        .insert([{
+                                            id: postId,
+                                            creator_id: user?.id,
+                                        }]);
+        
+    handleError(error);
+
+    return data;
+}
+
+export async function feedUnLike(postId) {
+    const supabase = await createServerSupabaseClient();
+    const {data: {user} } = await supabase.auth.getUser();
+
+    const {data, error} = await supabase.from("post_likes")
+                                        .delete()
+                                        .eq("id", postId)
+                                        .eq("creator_id", user?.id);
+        
+    handleError(error);
+    
     return data;
 }
