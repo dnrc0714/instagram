@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { loggedUserState } from "utils/recoil/atoms";
-import LikeButton from "./likeButton";
+import LikeButton from "./LikeButton";
 import TimeAgo from "javascript-time-ago";
 import ko from 'javascript-time-ago/locale/ko';
 
