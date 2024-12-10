@@ -75,35 +75,56 @@ export type Database = {
       }
       comments: {
         Row: {
-          comment: string | null
-          created_at: string
-          creator_id: string
+          comment: string
+          created_at: string | null
+          creator_id: string | null
           id: number
-          parent_id: number
+          modified_at: string | null
+          parent_id: number | null
           post_id: number
-          updated_at: string
         }
         Insert: {
-          comment?: string | null
-          created_at?: string
-          creator_id?: string
+          comment: string
+          created_at?: string | null
+          creator_id?: string | null
           id?: number
-          parent_id: number
+          modified_at?: string | null
+          parent_id?: number | null
           post_id: number
-          updated_at?: string
         }
         Update: {
-          comment?: string | null
-          created_at?: string
-          creator_id?: string
+          comment?: string
+          created_at?: string | null
+          creator_id?: string | null
           id?: number
-          parent_id?: number
+          modified_at?: string | null
+          parent_id?: number | null
           post_id?: number
-          updated_at?: string
         }
         Relationships: [
           {
+            foreignKeyName: "comments_creator_id_fkey1"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_post_id_fkey1"
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
@@ -237,7 +258,22 @@ export type Database = {
           modified_at?: string
           modifier_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "posts_creator_id_fkey1"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_modifier_id_fkey1"
+            columns: ["modifier_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profile: {
         Row: {

@@ -76,6 +76,7 @@ export async function getFeed(id) {
                                                     id,
                                                     content,
                                                     created_at,
+                                                    profile:creator_id (profile_img_url, name),
                                                     attachments (id, file_url, post_seq),
                                                     likes_count: post_likes!inner(count)
                                                 `)
@@ -84,12 +85,13 @@ export async function getFeed(id) {
 
     handleError(error);
 
-    const likesCount = postData.likes_count;
+    const likesCount = postData.likes_count[0]?.count || 0;
+
 
     const { data: likeData, error: likeError } = await supabase
     .from("post_likes")
     .select("id")
-    .eq("post_id", id)
+    .eq("id", id)
     .eq("creator_id", user?.id)
     .single();
 

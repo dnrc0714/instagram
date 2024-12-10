@@ -3,7 +3,7 @@
 import Feed from "./Feed";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
-import { getUserFeeds } from "actions/FeedActions";
+import { getUserFeeds } from "actions/feedActions";
 import { useEffect } from "react";
 import { Spinner } from "@material-tailwind/react";
 import { useRecoilValue } from "recoil";
