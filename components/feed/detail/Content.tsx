@@ -6,9 +6,9 @@ import ko from 'javascript-time-ago/locale/ko';
 import { useState } from "react";
 import { FaEdit, FaEllipsisV, FaTrash } from "react-icons/fa";
 import { useMutation } from "@tanstack/react-query";
-import { deleteFeed } from "actions/feedActions";
 import { useRouter } from "next/navigation";
 import { deleteFile } from "actions/storageActions";
+import { deleteFeed } from "actions/feedActions";
 
 TimeAgo.addLocale(ko);
 const timeAgo = new TimeAgo("ko-kr");
