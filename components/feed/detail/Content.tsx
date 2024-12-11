@@ -34,9 +34,8 @@ export default function FeedContent({ feed }){
 
     const deleteFeedMutation = useMutation({
         mutationFn: async () => {
-            const filePath = `/${feed.creator_id}/${feed.id}`;
-            deleteFeed(feed.id);
-            console.log(filePath);
+            const filePath = `${feed.creator_id}/${feed.id}`;
+            await deleteFeed(feed.id);
             await deleteFile(filePath);
         },
         onSuccess: () => {
