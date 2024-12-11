@@ -6,6 +6,7 @@ import { getReplies, saveReply } from "actions/commentActions";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { replyingToState } from "utils/recoil/atoms";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { FiArrowUp } from "react-icons/fi";
 
 export default function ReplyList({parentId, postId}) {
     const [replyText, setReplyText] = useState(""); // 답글 내용
@@ -35,19 +36,20 @@ export default function ReplyList({parentId, postId}) {
     return (
         <div>
             {replyingTo === parentId && (
-                <div className="mt-1 flex items-center justify-between">
-                <textarea
-                    onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Write your reply..."
-                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none"
-                />
-                <button
-                    onClick={() => addReplyMutation.mutate()}
-                    className="mt-2 bg-blue-500 text-white rounded-lg px-4 py-2"
-                >
-                    입력
-                </button>
-            </div>
+                <div className="mt-1 flex items-center justify-between gap-1">
+                    <input
+                        type="text"
+                        onChange={(e) => setReplyText(e.target.value)}
+                        placeholder="답글을 입력해주세요."
+                        className="w-full p-1- h9 border border-gray-300 rounded-lg"
+                    />
+                    <button
+                        onClick={() => addReplyMutation.mutate()}
+                        className=" bg-blue-500 text-white rounded-lg"
+                    >
+                    <FiArrowUp className="w-9 h-9" />
+                    </button>
+                </div>
             )}
             {/* 대댓글 목록 */}
             <div className="mt-4 space-y-3 pl-10">

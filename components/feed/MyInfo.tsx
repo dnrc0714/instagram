@@ -1,14 +1,10 @@
 'use client'
 
 import { Avatar } from "@material-tailwind/react";
-import { useQuery } from "@tanstack/react-query";
-import { getUserProfile } from "actions/kakaoActions";
 import { useRecoilValue } from "recoil";
 import { loggedUserState } from "utils/recoil/atoms";
-import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export default function MyInfo() {
-    const supabase = createBrowserSupabaseClient();
 
     const loggedUser = useRecoilValue(loggedUserState);
     

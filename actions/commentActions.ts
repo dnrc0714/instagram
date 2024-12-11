@@ -18,7 +18,9 @@ export async function getComments(postId) {
                                                 comment,
                                                 created_at,
                                                 creator_id,
+                                                modified_at,
                                                 post_id,
+                                                posts:post_id (creator_id),
                                                 profile:creator_id (id, name, profile_img_url)
                                             `)
                                             .eq("post_id", postId)
@@ -39,7 +41,9 @@ export async function saveComment({comment, postId}) {
                                         .insert([{
                                             post_id : postId,
                                             comment : comment,
-                                            creator_id: user?.id
+                                            creator_id: user?.id,
+                                            created_at: new Date().toISOString(),
+                                            modified_at: new Date().toISOString()
                                         }]);
 
     handleError(error);
@@ -59,16 +63,17 @@ export async function deleteComment(id) {
     return true;
 }
 
-export async function updateComment({comment, postId}) {
+export async function updateComment({comment, id}) {
     const supabase = await createServerSupabaseClient();
 
     const {data: {user} } = await supabase.auth.getUser();
 
     const {data, error} = await supabase.from("comments")
                                         .update({
-                                            comment: comment
+                                            comment: comment,
+                                            modified_at: new Date().toISOString()
                                         })
-                                        .eq('post_id', postId)
+                                        .eq('id', id)
                                         .eq('creator_id', user?.id);
     
     handleError(error);
@@ -86,7 +91,9 @@ export async function saveReply({comment, postId, parentId}) {
                                             post_id : postId,
                                             comment : comment,
                                             parent_id: parentId,
-                                            creator_id: user?.id
+                                            creator_id: user?.id,
+                                            created_at: new Date().toISOString(),
+                                            modified_at: new Date().toISOString()
                                         }]);
 
     handleError(error);
@@ -102,9 +109,11 @@ export async function getReplies({postId, parentId}) {
                                                 id,
                                                 comment,
                                                 created_at,
+                                                modified_at,
                                                 parent_id,
                                                 creator_id,
                                                 post_id,
+                                                posts:post_id (creator_id),
                                                 profile:creator_id (id, name, profile_img_url)
                                             `)
                                             .eq("post_id", postId)

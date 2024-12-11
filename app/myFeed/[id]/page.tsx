@@ -6,7 +6,7 @@ export default async function FeedDetail({ params }) {
     const feed = await getFeed(params.id);
 
     return (
-        <main>
+        <main className="w-full h-screen pt-10">
             {feed ? <UI feed={feed} /> : <div>Feed does not exists</div>}
         </main>
     );

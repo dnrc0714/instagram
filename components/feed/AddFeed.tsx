@@ -6,8 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 import { useDropzone } from "react-dropzone"
-import { useRecoilRefresher_UNSTABLE } from "recoil";
-import { loggedUserState } from "utils/recoil/atoms";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export async function handleSavePost({ content, images }) {
@@ -44,8 +42,6 @@ export async function handleSavePost({ content, images }) {
         }
 
         const postId = post.id;
-
-        console.log(postId);
 
         // 2. 이미지를 Supabase 스토리지에 업로드하고 `attachments` 테이블에 저장
         for (const image of images) {

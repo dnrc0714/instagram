@@ -1,10 +1,10 @@
 
 import FeedList from "components/feed/FeedList";
 import MyInfo from "components/feed/MyInfo";
-import { createServerSupabaseClient } from "utils/supabase/server";
+import { createBrowserSupabaseClient } from "utils/supabase/client";
+
 
 export default async function myFeedPage() {
-
     return (
         <div className="w-full h-screen flex justify-center ">
             <div className="flex flex-col gap-5">

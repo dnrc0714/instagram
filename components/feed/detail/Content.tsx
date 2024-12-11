@@ -17,7 +17,6 @@ export default function FeedContent({ feed }){
         slidesToScroll: 1,
         centerMode: false,         // 중앙 정렬
     };
-    console.log(feed);
     
     return (
         <div>
