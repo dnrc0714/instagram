@@ -38,6 +38,7 @@ export default function Comment({ comment }) {
             });
             setIsEditing(false);
         },
+        onMutate: () => setIsEditing(false)
     });
 
     const deleteCommentMutation = useMutation({

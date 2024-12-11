@@ -35,11 +35,11 @@ export async function searchFiles(search: string = "") {
     return filteredFiles;
 }
 
-export async function deleteFile(fileName: string) {
+export async function deleteFile(filePath: string) {
     const supabase = await createServerSupabaseClient();
     const {data, error} = await supabase.storage
                                         .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET)
-                                        .remove([fileName]);
+                                        .remove([filePath]);
 
     handleError(error);
 

@@ -55,7 +55,7 @@ export async function deleteComment(id) {
     const supabase = await createServerSupabaseClient();
     const {data: {user} } = await supabase.auth.getUser();
 
-    const {data, error} = await supabase.from("comments").delete().eq('id', id).or(`creator_id.eq.${user?.id},posts.creator_id.eq.${user?.id}`);
+    const {data, error} = await supabase.from("comments").delete().eq('id', id);
 
 
     handleError(error);

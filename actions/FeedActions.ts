@@ -76,6 +76,7 @@ export async function getFeed(id) {
                                                     id,
                                                     content,
                                                     created_at,
+                                                    creator_id,
                                                     profile:creator_id (profile_img_url, name),
                                                     attachments (id, file_url, post_seq),
                                                     likes_count: post_likes!inner(count)
@@ -98,6 +99,17 @@ export async function getFeed(id) {
     const isLiked = likeData ? true : false;
 
     return { ...postData, is_liked: isLiked, likes_count: likesCount };;
+}
+
+export async function deleteFeed(id) {
+    const supabase = await createServerSupabaseClient();
+
+    const {data, error} = await supabase.from("posts").delete().eq('id', id);
+
+
+    handleError(error);
+
+    return true;
 }
 
 export async function feedLike(postId) {
