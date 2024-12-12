@@ -1,6 +1,6 @@
 "use client"
 
-import LikeButton from "../../../components/feed/detail/LikeButton";
+import LikeButton from "../../../../components/feed/detail/LikeButton";
 import FeedContent from "components/feed/detail/Content";
 import CommentList from "components/feed/detail/comment/CommentList";
 

@@ -2,10 +2,25 @@
 
 import { Add, Home, Logout, Person, Search, Send } from "@mui/icons-material";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { loggedUserState } from "utils/recoil/atoms";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export default function Sidebar(){
+    
+    const [user, setUser] = useRecoilState(loggedUserState);
     const supabase = createBrowserSupabaseClient();
+    useEffect(() => {
+        const fetchUser = async () => {
+            const {data : {user}, error} = await supabase.auth.getUser();
+            if (error) throw error;
+
+            setUser(user?.id || null);
+        }
+
+        fetchUser();
+    }, []);
 
     return (
         <aside className="h-screen p-7 border-r border-gray-300 flex flex-col justify-between w-fit fixed top-0 left-0">
@@ -13,10 +28,10 @@ export default function Sidebar(){
                 <Link href="/">
                     <Home className="text-2xl mb-10"/>
                 </Link>
-                <Link href="/myFeed">
+                <Link href={`/${user?.id}/feed`}>
                     <Person className="text-2xl"/>
                 </Link>
-                <Link href="/myFeed/add">
+                <Link href={`/${user?.id}/feed/add`}>
                     <Add className="text-2xl"/>
                 </Link>
                 <Link href="/discover">

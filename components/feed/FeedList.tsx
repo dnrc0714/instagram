@@ -6,18 +6,15 @@ import { useInView } from "react-intersection-observer";
 import { getUserFeeds } from "actions/feedActions";
 import { useEffect } from "react";
 import { Spinner } from "@material-tailwind/react";
-import { useRecoilValue } from "recoil";
-import { loggedUserState } from "utils/recoil/atoms";
 
-export default function FeedList() {
-    const loggedInUser = useRecoilValue(loggedUserState);
+export default function FeedList({ params }) {
 
     const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = 
     useInfiniteQuery({
         initialPageParam: 1,
-        queryKey: ["posts", loggedInUser?.id],
+        queryKey: ["posts", params?.userId],
         queryFn: ({ pageParam }) =>
-            getUserFeeds({ userId: loggedInUser?.id, page: pageParam, pageSize: 12 }),
+            getUserFeeds({ userId: params?.userId, page: pageParam, pageSize: 12 }),
         getNextPageParam: (lastPage) =>
             lastPage.hasNextPage ? lastPage.page + 1 : null,
     });

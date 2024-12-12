@@ -2,7 +2,7 @@
 
 import { Spinner } from "@material-tailwind/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { useState } from "react";
 import { useDropzone } from "react-dropzone"
@@ -93,9 +93,12 @@ export async function handleSavePost({ content, images }) {
     }
     }
 
-export default function AddFeed({ loggedInUser }) {
+export default function AddFeed() {
+    
     const router = useRouter();
     const queryClient = useQueryClient();
+    const params = useParams();
+
     const [images, setImages] = useState<File[]>([]);
     const [content, setContent] = useState('');
     
@@ -116,7 +119,7 @@ export default function AddFeed({ loggedInUser }) {
             alert('저장되었습니다. myFeed로 이동합니다.');
             setImages([]); // 이미지 배열 초기화
             setContent(""); // 설명 초기화
-            router.push('/myFeed');
+          router.push(`${params?.userId}/myFeed`);
         },
         onError: (error) => {
             console.error("Save failed:", error); // 에러 처리

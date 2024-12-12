@@ -54,7 +54,7 @@ export default function FeedContent({ feed }){
             <div className="flex items-center gap-2 pb-2 justify-between">
                 <div className="flex items-center gap-2">
                     <img
-                        src={feed?.profile?.profile_img_url || '../images/simple_profile_img.png'}
+                        src={feed?.profile?.profile_img_url || '/images/simple_profile_img.png'}
                         alt="creator"
                         className="w-8 h-8 rounded-full"
                     />
