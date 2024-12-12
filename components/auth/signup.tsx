@@ -2,7 +2,7 @@
 
 import { Button, Input } from "@material-tailwind/react";
 import { useMutation } from "@tanstack/react-query";
-import { saveUserProfile } from "actions/kakaoActions";
+import { saveUserProfile } from "actions/userActions";
 import { useState } from "react";
 import { useQuery } from "react-query";
 

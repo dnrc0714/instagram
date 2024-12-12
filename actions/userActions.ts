@@ -23,10 +23,9 @@ export async function saveUserProfile(profileImageUrl: string, userId, name) {
         handleError(error);
 }
 
-export async function getUserProfile() {
+export async function getUserProfile(userId) {
     const supabase = await createServerSupabaseClient(); // 서버에서 Supabase 클라이언트 생성
-    const {data: {user} } = await supabase.auth.getUser();
-    const safeUserId = isUUID(user?.id) ? user?.id : uuidv4(); // 유효하지 않으면 새로운 UUID 생성
+    const safeUserId = isUUID(userId) ? userId : uuidv4(); // 유효하지 않으면 새로운 UUID 생성
 
     const {data, error} = await supabase.rpc('get_user_info', {
         user_id: safeUserId
@@ -49,4 +48,35 @@ export async function getAllUser() {
     handleError(error);
 
     return data;
+}
+
+export async function searchUsers({ search, page, pageSize }) {
+    const supabase = await createServerSupabaseClient();
+
+    const { data, count, error } = 
+    await supabase
+        .from("profile")
+        .select("*", { count: "exact" })
+        .like("name", `%${search}%`)
+        .range((page - 1) * pageSize, page * pageSize - 1);
+    
+    const hasNextPage = page < Math.ceil(count / pageSize);
+    
+    if (error) {
+        console.error(error);
+        return {
+            data: [],
+            count: 0,
+            page: null,
+            pageSize: null,
+            error,
+        };
+    }
+
+    return {
+        data,
+        page,
+        pageSize,
+        hasNextPage,
+    };
 }

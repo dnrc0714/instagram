@@ -2,15 +2,16 @@
 
 import { Avatar } from "@material-tailwind/react";
 import { useQuery } from "@tanstack/react-query";
-import { getUserProfile } from "actions/kakaoActions";
+import { getUserProfile } from "actions/userActions";
 import { useParams } from "next/navigation";
 import { useRecoilValue } from "recoil";
 import { loggedUserState } from "utils/recoil/atoms";
 
 export default function MyInfo() {
+    const params = useParams();
     const { data } = useQuery({
         queryKey: ['user_info'], // 쿼리 키와 파라미터로 캐싱 관리
-        queryFn: () => getUserProfile(), // 실제 rpc 호출
+        queryFn: () => getUserProfile(params.userId), // 실제 rpc 호출
     });
     
     return (

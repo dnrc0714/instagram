@@ -119,7 +119,7 @@ export default function AddFeed() {
             alert('저장되었습니다. myFeed로 이동합니다.');
             setImages([]); // 이미지 배열 초기화
             setContent(""); // 설명 초기화
-          router.push(`${params?.userId}/myFeed`);
+            router.push(`${params?.userId}/feed`);
         },
         onError: (error) => {
             console.error("Save failed:", error); // 에러 처리

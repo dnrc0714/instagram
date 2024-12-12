@@ -1,4 +1,4 @@
-import { saveUserProfile } from "actions/kakaoActions";
+import { saveUserProfile } from "actions/userActions";
 
 export default async function CallBack(session) {
     const userId = session?.user?.id;

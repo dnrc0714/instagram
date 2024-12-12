@@ -4,7 +4,7 @@ import Person from "./Person";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loggedUserState, presenceState, selectedUserState } from "utils/recoil/atoms";
 
-import { getAllUser } from "actions/kakaoActions";
+import { getAllUser } from "actions/userActions";
 import { useQuery } from "@tanstack/react-query";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
@@ -26,7 +26,7 @@ export default function ChatPeopleList() {
         const channel = supabase.channel("online_users", {
             config: {
             presence: {
-                key: loggedUser.id,
+                key: loggedUser?.id,
             },
             },
         });
@@ -64,6 +64,7 @@ export default function ChatPeopleList() {
                             userId={user.id}
                             name={user.name}
                             profileImgUrl={user?.profile_img_url}
+                            callType='A'
                         />
                     ))
                 }
