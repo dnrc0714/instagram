@@ -9,27 +9,22 @@ import { loggedUserState } from "utils/recoil/atoms";
 import { createBrowserSupabaseClient } from "utils/supabase/client";
 
 export default function Home() {
-  const [user, setUser] = useRecoilState(loggedUserState);
-    const supabase = createBrowserSupabaseClient();
-    useEffect(() => {
-        const fetchUser = async () => {
+  const supabase = createBrowserSupabaseClient();
+  const [loggedInUser, setLoggedInUser] = useRecoilState(loggedUserState);
+  useEffect(() => {
+    const fetchUser = async () => {
             const {data : {user}, error} = await supabase.auth.getUser();
-            if (error) throw error;
-
             const data = await getUserProfile(user.id);
-            setUser(data);
+            setLoggedInUser(data);
         }
-
         fetchUser();
-
-        
     }, []);
     
   return (
     <main className="w-full h-screen flex flex-col gap-2 items-center justify-center">
     <h1 className="font-bold text-xl">
         Welcome 
-        {user?.name}
+        {loggedInUser?.name}
         !
     </h1> 
     <LogoutButton />

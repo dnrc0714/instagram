@@ -78,7 +78,7 @@ export async function getFeed(id) {
                                                     content,
                                                     created_at,
                                                     creator_id,
-                                                    profile:creator_id (profile_img_url, name),
+                                                    profile:creator_id (id, profile_img_url, name, secret_tp),
                                                     attachments (id, file_url, post_seq),
                                                     likes_count: post_likes!inner(count)
                                                 `)

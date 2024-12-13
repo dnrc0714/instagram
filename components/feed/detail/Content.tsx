@@ -9,6 +9,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { deleteFile } from "actions/storageActions";
 import { deleteFeed } from "actions/feedActions";
+import Link from "node_modules/next/link";
 
 TimeAgo.addLocale(ko);
 const timeAgo = new TimeAgo("ko-kr");
@@ -52,6 +53,7 @@ export default function FeedContent({ feed }){
     return (
         <div>
             <div className="flex items-center gap-2 pb-2 justify-between">
+                <Link href={`/${feed?.creator_id}/feed`}>
                 <div className="flex items-center gap-2">
                     <img
                         src={feed?.profile?.profile_img_url || '/images/simple_profile_img.png'}
@@ -60,6 +62,7 @@ export default function FeedContent({ feed }){
                     />
                     <span className="font-semibold">{feed?.profile?.name}</span>
                 </div>
+                </Link>
                 <div className="relative">
                      {/* 더보기 버튼 */}
                 <button onClick={handleMoreClick} className="text-gray-500 hover:text-black">

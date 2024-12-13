@@ -51,6 +51,12 @@ export async function getAllUser() {
 }
 
 export async function searchUsers({ search, page, pageSize }) {
+    if (search == null || search === undefined || search == '') {
+        return { data: [],
+            count: 0,
+            page: null,
+            pageSize: null, }; // 빈 결과 반환
+    }
     const supabase = await createServerSupabaseClient();
 
     const { data, count, error } = 
@@ -79,4 +85,15 @@ export async function searchUsers({ search, page, pageSize }) {
         pageSize,
         hasNextPage,
     };
+}
+
+export async function updateSecret(secretTp) {
+    const supabase = await createServerSupabaseClient();
+    const {data: {user}} = await supabase.auth.getUser();
+
+    const { data, error} = await supabase.from('profile')
+                                        .update({
+                                            secret_tp: secretTp
+                                        })
+                                        .eq('id', user.id);
 }

@@ -11,3 +11,4 @@ export default async function FeedDetail({ params }) {
         </main>
     );
 }
+

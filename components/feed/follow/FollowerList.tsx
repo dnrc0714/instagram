@@ -2,25 +2,24 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { selectedUserState } from "utils/recoil/atoms";
-
-import {  searchUsers } from "actions/userActions";
+import { useParams } from "next/navigation";
 import { useInfiniteQuery } from "@tanstack/react-query";
-
 import Person from "components/chat/Person";
 import { useInView } from "react-intersection-observer";
+import { getFollwerList, getFollwingList } from "actions/followActions";
 
-export default function SearchUserList({search}) {
+export default function FollowerList() {
+    const param = useParams();
     const [selectedUser, setSelectedUser] = useRecoilState(selectedUserState);
 
     const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
         useInfiniteQuery({
         initialPageParam: 1,
-        queryKey: ["profile", search],
+        queryKey: ["follows", param.userId],
         queryFn: ({ pageParam }) =>
-            searchUsers({ search, page: pageParam, pageSize: 16 }),
+            getFollwerList({ userId:param.userId, page: pageParam, pageSize: 16 }),
         getNextPageParam: (lastPage) =>
             lastPage.page ? lastPage.page + 1 : null,
-        enabled: Boolean(search),
         });
 
     const { ref, inView } = useInView({
@@ -28,6 +27,10 @@ export default function SearchUserList({search}) {
     });
 
     useEffect(() => {
+        data?.pages
+                    ?.map((page) => page.data)
+                    ?.flat()
+                    ?.map((user) => {console.log(user.profile)});
         if (inView && hasNextPage && !isFetching && !isFetchingNextPage) {
         fetchNextPage();
         }
@@ -40,19 +43,19 @@ export default function SearchUserList({search}) {
                     ?.flat()
                     ?.map((user) => (
                         <Person
-                            key={user.id}
+                            key={user.profile?.id}
                             onClick={() => {setSelectedUser({
-                                id: user.id,
-                                name: user.name,
-                                profileImgUrl: user?.profile_img_url
+                                id: user.profile.id,
+                                name: user.profile.name,
+                                profileImgUrl: user.profile?.profile_img_url
                             });}}
                             onlineAt={false}
-                            isActive={selectedUser?.id === user.id}
+                            isActive={selectedUser?.id === user.profile.id}
                             onChatScreen={false}
-                            userId={user.id}
-                            name={user.name}
-                            profileImgUrl={user?.profile_img_url}
-                            callType={'B'}
+                            userId={user.profile.id}
+                            name={user.profile.name}
+                            profileImgUrl={user.profile?.profile_img_url}
+                            callType={'C'}
                         />
                     ))
                 }

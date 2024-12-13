@@ -7,7 +7,7 @@ import { getUserFeeds } from "actions/feedActions";
 import { useEffect } from "react";
 import { Spinner } from "@material-tailwind/react";
 
-export default function FeedList({ params }) {
+export default function FeedList({ params, isLoading }) {
 
     const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } = 
     useInfiniteQuery({
@@ -33,6 +33,9 @@ export default function FeedList({ params }) {
         useEffect(() => {
         }, [inView]);
 
+    if(isLoading) {
+        return <Spinner/>;
+    }
     return (
         <div className="grid lg:grid-cols-4 md:grid-cols-4 grid-cols-3">
             {

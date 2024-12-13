@@ -3,9 +3,18 @@
 import LikeButton from "../../../../components/feed/detail/LikeButton";
 import FeedContent from "components/feed/detail/Content";
 import CommentList from "components/feed/detail/comment/CommentList";
-
+import { redirect } from "next/navigation";
+import { useRecoilValue } from "recoil";
+import { loggedUserState } from "utils/recoil/atoms";
 
 export default function UI({ feed }) {
+    const loggedUser = useRecoilValue(loggedUserState);
+
+    // secret_tp가 true라면 리디렉션 처리
+    if (feed?.profile?.secret_tp && (loggedUser?.id != feed.profile?.id)) {
+        redirect("/error"); // 리디렉션 수행
+    }
+
     return (
         <div className="flex flex-col items-center justify-center w-full">
             {/* 작성자INFO, 이미지 슬라이더, 게시물 내용 */}

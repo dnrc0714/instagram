@@ -128,20 +128,38 @@ export type Database = {
       follows: {
         Row: {
           created_at: string | null
+          follow_st: boolean | null
           follower_id: string
           following_id: string
         }
         Insert: {
           created_at?: string | null
+          follow_st?: boolean | null
           follower_id: string
           following_id: string
         }
         Update: {
           created_at?: string | null
+          follow_st?: boolean | null
           follower_id?: string
           following_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "follows_follower_id_fkey1"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follows_following_id_fkey1"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "profile"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       message: {
         Row: {
@@ -273,16 +291,19 @@ export type Database = {
           id: string
           name: string | null
           profile_img_url: string | null
+          secret_tp: boolean | null
         }
         Insert: {
           id: string
           name?: string | null
           profile_img_url?: string | null
+          secret_tp?: boolean | null
         }
         Update: {
           id?: string
           name?: string | null
           profile_img_url?: string | null
+          secret_tp?: boolean | null
         }
         Relationships: []
       }
@@ -326,6 +347,7 @@ export type Database = {
           post_count: number
           follow_count: number
           following_count: number
+          secret_tp: boolean
         }[]
       }
     }

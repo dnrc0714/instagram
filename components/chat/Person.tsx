@@ -7,7 +7,7 @@ import { FiArrowRight } from "react-icons/fi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-TimeAgo.addDefaultLocale(ko);
+TimeAgo.addLocale(ko);
 const timeAgo = new TimeAgo("ko-kr");
 
 export default function Person({
@@ -31,23 +31,31 @@ export default function Person({
             onClick={onClick}
         >
             <Avatar
-            src={profileImgUrl || './images/simple_profile_img.png'}
+            src={profileImgUrl || '/images/simple_profile_img.png'}
             alt="Profile"
             variant="circular"
             size="md"
             className="bg-gray-200"
             ></Avatar>
                 <p className="text-black font-bold text-lg">{name}</p>
-                {callType == 'A' ? (
-                    <p className="text-gray-500 text-sm">{onlineAt && timeAgo.format(Date.parse(onlineAt))}</p>
-                ) : (
+                {callType == 'A' && (<p className="text-gray-500 text-sm">{onlineAt && timeAgo.format(Date.parse(onlineAt))}</p>)}
+                {callType == 'B' && (
                         <button
-                            onClick={() => {router.push(`${userId}/feed`)}}
-                            className="text-gray-500 hover:text-blue-500"
-                            title="완료"
-                        >
-                            <FiArrowRight size={16}/>
-                        </button>
+                        onClick={() => {router.push(`${userId}/feed`)}}
+                        className="text-gray-500 hover:text-blue-500"
+                        title="완료"
+                    >
+                        <FiArrowRight size={16}/>
+                    </button>
+                )}
+                {callType == 'C' && (
+                        <button
+                        onClick={() => {router.push(`/${userId}/feed`)}}
+                        className="text-gray-500 hover:text-blue-500"
+                        title="완료"
+                    >
+                        <FiArrowRight size={16}/>
+                    </button>
                 )}
         </div>
     )
