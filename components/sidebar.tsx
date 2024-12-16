@@ -37,9 +37,9 @@ export default function Sidebar(){
                 <Link href="/discover">
                     <Search className="text-2xl"/>
                 </Link>
-                <Link href="/chat">
+                {/* <Link href="/chat">
                     <Send className="text-2xl"/>
-                </Link>
+                </Link> */}
             </div>
 
             <div>
